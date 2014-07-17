@@ -1,0 +1,136 @@
+GAE LongTalk
+how to use Google AppEngine
+12:00 18 Jul 2014
+Tags: GAE
+
+@sinmetal
+TOPGATE GAEマイスター
+
+* Agenda
+
+- Profile
+- GAE Modules
+- Managed VMs
+- GAE Topics
+- Advertise
+
+* Profile
+
+.link http://www.topgate.co.jp TOPGATE
+.link https://twitter.com/sinmetal @sinmetal
+.link https://plus.google.com/u/0/+ShingoIshimura +ShingoIshimura
+
+.image https://pbs.twimg.com/profile_images/3739046962/eef04744836642cc99a8725880a43088.png
+
+基本Javaの人だけど、最近はgolangが好き
+
+* GAE Modules
+
+* GAE Version
+
+- Version管理されるのはApplicationのみ
+
+例えば、以下は共有されない
+
+- Datastore
+- TaskQueueの設定
+- Cronの設定
+- カスタムインデックス
+- Search API Index
+- Memcache
+
+* GAE Request
+
+.image /2014/gcp0178/images/GAERequest.png
+
+* GAE Backend
+
+- User Requestを受けるのではなく、裏で処理を行うinstance
+- Cron, TQで行なう処理はBackendで行っていた
+- 15minぐらいで死ぬ
+- 現在は非推奨となっている
+- Versionの1つとしてdeployを行っていた
+
+* GAE Modules
+
+- Versionの上の階層としてできた
+- BackendもVersion管理できるようになった
+- スケーリングで設定できる項目が増えた
+
+例
+
+.image /2014/gcp0178/images/AppServerExample.png
+
+* Automatic Scaling
+
+- 従来のFrontEndのinstanceのスケーリングに最も近い設定
+- 60秒Deadlinesも有効だが、TQから実行した場合はDeadlinesの制限が10分
+- min-idle-instancesを指定すると、待機用のinstanceが立ち上がる
+
+* Manual Scaling
+
+- instanceの数を明示的に指定する
+
+* Basic Scaling
+
+- Automatic ScalingとManual Scalingのハイブリッドのような設定
+- Deadlinesやinstance typeはManula Sacalingと同じだが、アクセス数に応じてオートスケール
+
+* Managed VMs
+
+* Whats Managed VMs ?
+
+- GAEからGCEを管理する
+- GAEのAppServerがGCEで動作する
+- Docker対応
+
+* GAE Topics
+
+* Datastore Topics
+
+* Key Design & Kind Design
+
+- Keyの値には意味がある値の方が良い。Userのデータならばemailなど。
+- 複数の値を入れてもいい。categoryId-_-itemId
+- リトライを行いやすいのと、重複チェックがしやすい
+- allocatedidはRPCが発生するので、UUIDも視野に入れる
+- 正規化は必ずしも正ではない。
+- Applicationにどのような機能が必要かを軸に設計する
+
+* EntityGroup and Transaction
+
+- EGは必要最低限にする
+- TQはTxに参加できるので、TQで保証するのも手
+- 一度に更新できる数を増やしたい場合はシャーディングするとか
+
+* Retry and Idempotence
+
+- RPCは冪等になるようにリトライするのが良い
+- TQを使うことも視野に入れる
+- TQは正常終了してもリトライされることがあるので、冪等に作る
+
+* Query or Get
+
+- QueryよりGetを使える構造になっていた方が楽
+- 注文票と明細のKindがあるのであれば、注文票は明細のKeyListをプロパティに持つ
+- Keyを持つKindの条件は検索するかどうか。明細から注文票を検索することがあるのなら、明細に注文票のKeyを持つ
+- Queryを使う場合は、keysOnlyで取得して、getするのが良い
+- offsetはダメだ。cursorを使う。
+
+* Search
+
+- Simple Property Index
+- Composite Index
+- Search API
+- Indexを自作する。Index用のKindを作るとか。bigramを作るとか。
+
+* Speed
+
+- RPCの回数は少なく
+- 複数のRPCを投げる場合は、非同期で投げる
+
+* Advertise
+
+* MMCD Training
+
+.link http://www.topgate.co.jp/mmcd-training Master of Mobile Cloud Development
