@@ -1,0 +1,6 @@
+# goenv
+activate
+
+.idea/
+
+pkg/
