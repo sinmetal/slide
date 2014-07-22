@@ -1,7 +1,15 @@
-application: your-application-id
-version: talks-test
+application: sinmetal-slide
+module: default
+version: 201407181817
 runtime: go
 api_version: go1
+instance_class: F1
+automatic_scaling:
+  min_idle_instances: automatic
+  max_idle_instances: automatic  # default value
+  min_pending_latency: automatic  # default value
+  max_pending_latency: 100ms
+  max_concurrent_requests: 50
 
 handlers:
 - url: /favicon.ico
