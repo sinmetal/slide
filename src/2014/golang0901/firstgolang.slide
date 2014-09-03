@@ -1,0 +1,434 @@
+初めてのGolang
+Let's Go!
+17:30 08 Sep 2014
+Tags: golang
+
+@sinmetal
+TOPGATE GAEマイスター
+
+* Agenda
+
+- Profile
+- What's golang?
+- Using golang
+- Tools
+- Language Specification
+- Goroutine and Channel
+- Standard library
+- Watch golang
+- Try golang
+
+* Profile
+
+.link http://www.topgate.co.jp TOPGATE
+.link https://twitter.com/sinmetal @sinmetal
+.link https://plus.google.com/u/0/+ShingoIshimura +ShingoIshimura
+
+.image https://pbs.twimg.com/profile_images/3739046962/eef04744836642cc99a8725880a43088.png
+
+基本Javaの人だけど、最近はgolangが好き
+
+* What's golang?
+
+- オープンソース
+- 主な舵取りはgoogle
+- 2009年11月10日(米国時間) googleより発表
+- 現在のVersionはgo1.3.
+- 目指している所は早さ。実行速度もコンパイル速度も。
+- タイプセーフ
+- メモリセーフ
+- 並列処理
+- 実行ファイル生成
+- クロスコンパイル
+- 豊富な標準Package
+- 豊富な標準Tool
+
+* gopher
+
+- golangのマスコットキャラクター
+- golangを書くエンジニアを指すこともある
+.link https://www.google.co.jp/search?q=gopher+golang&safe=off&tbm=isch&tbo=u&source=univ&sa=X&ei=7PlCUtX4B8HpiAfc0IGQDw&ved=0CC4QsAQ&biw=1240&bih=653&dpr=1 gopher
+
+* Using golang
+
+.link https://developers.google.com/appengine/ GoogleAppEngine
+ google社内ではいろんなものをgolangに置き換えているらしい
+.link https://github.com/youtube/vitess vitess
+ youtubeの裏で使っているMySqlのスケーリングをするためのもの
+.link https://github.com/dotcloud/docker docker
+ コンテナ型の仮想化を行なうソフトウェア
+.link https://code.google.com/p/go-wiki/wiki/GoUsers etc
+ golangが使われているもの一覧
+ WebApp, Game Serverなど色んなものがある
+
+* Development
+
+* Hello World
+
+.play ./resource/helloworld.go
+
+* Tools
+
+* go run
+
+プログラムを実行する
+
+開発中はgo runで動かして確認する
+
+* go build
+
+ビルドを行い実行ファイルを生成する
+
+ビルドした環境の実行ファイルを生成するので、64bit Mac OS Xでビルドすれば、
+64bit Mac OS Xであれば、それ単体で動作するbinaryが吐かれる
+
+Windowsでビルドすれば、EXEが吐かれる
+
+自分の環境を調べるには $ go version を実行する
+
+.code ./resource/goversion.txt
+
+* go get
+
+公開されているpackageを取得する
+
+Bitbucket (Git, Mercurial)
+
+	import "bitbucket.org/user/project"
+GitHub (Git)
+
+	import "github.com/user/project"
+Google Code Project Hosting (Git, Mercurial, Subversion)
+
+	import "code.google.com/p/project"
+Launchpad (Bazaar)
+
+	import "launchpad.net/project"
+
+* go fmt
+ 
+golangのformatterをかけるtool
+
+何のeditorを使っていようと、commit前にgo fmtをかければ良し
+
+* go test
+
+UnitTestを実行する
+
+ファイル名は、{テスト対象のファイル}_test.go
+ファイルを置く場所は、テスト対象のファイルと同じ場所 (同じpackage)
+標準パッケージのtestingパッケージを利用し、TestXXX関数を作成する
+
+.code ./resource/sample_test.go
+
+* Path
+
+- golangはディレクトリ構成が標準で定められている
+
+.code ./resource/dir.txt
+
+- $GOPATH
+go toolが読みに来るPATH
+projectnameディレクトリを$GOPATHに設定する
+
+* Cross compiling
+
+golangはCross compilingをサポート
+Cross compile toolとしてgoxを使うと簡単にできる
+
+.link https://github.com/mitchellh/gox gox
+
+出力できる環境一覧
+
+.code ./resource/crosscompileenv.txt
+
+* Language Specification
+
+* Hello World
+
+.play ./resource/hellogolang.go
+
+* Keyword (1)
+
+- break : for, switch, select から抜ける
+- case : switch, select のcase
+- chan : チャネル
+- const : 定数
+- continue : for文で次の繰り返しを開始する
+- default : switch, selectのdefault
+- defer : 関数を遅延実行
+- else : if の分岐
+- fallthrough : switch, select, caseで次のcaseを続けて実行
+- for : ループ
+- func : 関数
+
+* Keyword (2)
+
+- go : 関数をgoroutineとして実行
+- goto : ラベルにジャンプ
+- if : 条件分岐
+- import : 他のpackageの利用を宣言
+- interface : インタフェース
+- map : マップ
+- package : ソースファイルが所属するpackage
+- range : forで配列などから値を順番に取得する
+- return : 関数から呼び出し元に戻る
+- select : チャネル送受信による分岐
+- struct : 構造体
+
+* Keyword (3)
+
+- switch : 条件分岐
+- type : 型
+- var : 変数
+
+* For loop only
+
+loopを表すのはforだけ
+whileは無い
+覚えることは少なく単純に
+
+.play ./resource/forsample.go
+
+* Forever
+
+無限ループもforで表現
+
+.code ./resource/forever.go
+
+* Multiple results
+
+関数は多値を戻せます
+
+.play ./resource/multipleresults.go
+
+* Function closures
+
+golangの関数はclosure
+関数を変数に入れることもできる
+
+.play ./resource/closure.go
+
+* class ?
+
+golangにclassはありません
+
+* extends ?
+
+golangにextendsはありません
+
+* Interface
+
+interfaceを満たしていれば、そのinterfaceを実装しているとみなされる
+
+.play ./resource/interface.go
+
+* Methods
+
+struct型にmethodを定義する
+
+.code ./resource/methodsample.go
+
+* Package
+
+Javaのpackageとは考え方が違うので、ほいほい分けなくていい
+名前が被らないようにDomainを入れるとかも無い
+
+.play ./resource/package.go
+
+* Exception ?
+
+golangにExceptionはありません
+
+* Errors
+
+errorは戻り値として返す
+
+.play ./resource/errorsample.go
+
+* Goroutine and Channel
+
+* What's Goroutine? (1)
+
+スレッドのようなものだが、もっとコストが低い
+
+main関数もgoroutineで動いている
+
+go keywordを関数呼び出しの前に付けることで、新しいgoroutineで起動する
+
+.play ./resource/newgoroutine.go
+
+* What's Goroutine? (2)
+
+実際に同時に動いているわけではなく、IO待ちなどの時に処理を一時中断し、別のgoroutineを走らせている
+マルチスレッドにしたい場合は、GOMAXPROCSを2以上にすれば、同時に動かせる
+
+.play ./resource/gosched.go
+
+* What's Channel?
+
+goroutine間での、値の受け渡しに用いられる
+送受信時に、ブロックを行なうので、同期にも使える
+
+.play ./resource/channel.go
+
+* Channel Deadlock
+
+受信する数より、送信するより数が少ない場合などは、deadlockが起こる
+
+.play ./resource/channel-deadlock.go
+
+* Channel Capacity (1)
+
+ChannelはCapacityが設定できる (default 0)
+
+.play ./resource/channel-capacity.go
+
+* Channel Capacity (2)
+
+Channelを大きくすれば、受信されてなくても、追加できる
+
+.play ./resource/channel-capacity2.go
+
+* Select
+
+goroutineを複数の通信操作で待たせる
+最初に実行可能になったものを実行する
+
+.play ./resource/select.go /start/,/end/
+
+* Channel is first-class object
+
+Channelを引数として渡したり、返り値として返すことができる
+標準パッケージでも、よく行われている
+
+- time.After 定義
+
+.code ./resource/timeafter.go
+
+- example
+
+.code ./resource/channel-time.go
+
+* Summary Example
+
+本を書くgoroutine 1つ
+本を運ぶgoroutine たくさん
+本を燃やすgoroutine 1つ
+
+3つのgoroutineがchannelでやり取りしながら、お仕事
+
+.iframe http://play.golang.org/p/kAe6JlfbdT 300 800
+.link http://play.golang.org/p/kAe6JlfbdT Go Playground
+
+* Standard library
+
+* Standard library
+
+.link http://golang.org/pkg/#stdlib Standard library
+
+golangは標準ライブラリが豊富に揃っている
+
+例えば
+
+- http
+- json
+
+標準に無いものも準標準にあったりする
+
+.link http://golang.org/pkg/#subrepo Sub-repositories
+
+ 文字列のエンコードなどは準標準にある
+
+.link http://godoc.org/code.google.com/p/go.text/encoding encoding package
+
+* net/http package
+
+Web Serverも標準ライブラリでできる
+
+.code ./resource/httpsample.go
+
+* net/http/httptest package
+
+httpのtestも標準ライブラリでできる
+
+.code ./resource/httptestsample.go /start/,/end/
+
+* encode/json package
+
+jsonも標準ライブラリで扱える
+
+.play ./resource/json.go /start/,/end/
+
+* Watch golang
+
+* Official
+
+.link http://golang.org/ The Go Programming Language
+ golangの公式サイト
+
+.link http://blog.golang.org/ The Go Blog
+ 公式Blog
+
+.link https://groups.google.com/forum/#!forum/golang-nuts golang-nuts
+ 公式のGoogle Group
+ 質問や議論が飛び交っているので、眺めていると、知識が増える
+
+* Community
+
+.link http://godoc.org/ GoDoc
+ GitHubなどにあるgolang repositoryのDocumentをホスティングしている
+ 自分が欲しいものが見つかるかも
+
+.link http://go-search.org/ GoSearch
+ Githubなどのpackageを検索できる
+ 自分が欲しいものが見つかるかも
+
+.link https://code.google.com/p/go-wiki/ Go-Wiki
+ ExampleやTipsがまとめられているWiki
+
+* Japanese Blog ...etc
+
+.link http://qiita.com/tenntenn/items/0e33a4959250d1a55045 Go言語の初心者が見ると幸せになれる場所
+ 今まで出てきたものは、だいたい全部載ってる
+
+.link http://mattn.kaoriya.net/ Big Sky
+.link http://jxck.hatenablog.com/ Block Rockin’ Codes
+.link http://kobegdg.blogspot.jp/ GDG神戸
+.link http://takashi-yokoyama.blogspot.jp/ T.Yokoyamaのブログ
+.link http://d.hatena.ne.jp/taknb2nch/ taknb2nchのメモ
+.link http://qt-luigi.blogspot.jp/ ゴキゲンBlog
+
+* Study session
+
+.link http://connpass.com/series/312/ GoCon
+.link https://github.com/goken/goken 質実Go研
+.link http://gunosygo.connpass.com/ Gunosy.go
+.link http://dwgo.connpass.com/ dwanGo
+.link http://connpass.com/event/6579/ ヒカルのgo (hikarie.go)
+.link http://connpass.com/event/7559/ Fukuoka.go
+.link https://sites.google.com/site/gdgchugokuofficial/sourcereading/golang-cafe Golang Cafe
+
+* Try golang
+
+* First Step
+
+.link http://tour.golang.org/#1 A Tour of Go
+ まずはA Tour of Go !
+
+.link http://play.golang.org/ Go Playground
+ Web上で実行でき、共有もできる遊び場
+ A Tour of GoもPlaygroundで動かしてる
+ 因みにこのスライドでデモしたコードもPlaygroundで動かしてる
+
+* Second Step
+
+はじめてのGoを読む
+
+.link http://jxck.hatenablog.com/entry/wbpress-vol.81-go Web+DB Press vol.82 で Go の特集を書かせて頂きました #wdpress
+
+* Third Step
+
+SampleやLibrary漁って読んでみたり、好きなもの作ってみたり...
+
+標準ライブラリを読むのもおすすめ

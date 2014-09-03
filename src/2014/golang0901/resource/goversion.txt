@@ -1,0 +1,2 @@
+$ go version
+go version devel +f4d1cb8d9a91 Thu Sep 19 22:34:33 2013 +1000 darwin/amd64

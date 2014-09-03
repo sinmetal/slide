@@ -1,0 +1,7 @@
+projectname
+├── bin // go install時の格納先
+├── pkg // 必要な外部パッケージの格納先
+└── src
+    └── packagename
+        ├── main.go
+        └── main_test.go
