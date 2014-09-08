@@ -69,6 +69,10 @@ TOPGATE GAEマイスター
 
 .play ./resource/helloworld.go
 
+A Tour of GoでGoの世界へ
+
+.link http://tour.golang.org/#1 A Tour of Go
+
 * Tools
 
 * go run
