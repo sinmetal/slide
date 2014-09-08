@@ -47,7 +47,9 @@ TOPGATE GAEマイスター
 
 - golangのマスコットキャラクター
 - golangを書くエンジニアを指すこともある
+.image ./resource/gopherbw.png 350 350
 .link https://www.google.co.jp/search?q=gopher+golang&safe=off&tbm=isch&tbo=u&source=univ&sa=X&ei=7PlCUtX4B8HpiAfc0IGQDw&ved=0CC4QsAQ&biw=1240&bih=653&dpr=1 gopher
+原著作者はRenée French氏
 
 * Using golang
 
