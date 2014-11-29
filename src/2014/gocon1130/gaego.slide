@@ -83,7 +83,7 @@ max instances 38
 
 * Managed VMs for Golang
 
-.image /2014/gocon1130/resource/appengine_for_go_performance.png
+.image /2014/gocon1130/resource/mvm_for_go_performance.png
 
 max instances 1
 
