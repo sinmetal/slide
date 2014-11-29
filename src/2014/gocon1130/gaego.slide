@@ -4,12 +4,92 @@ Let's GAE/Go!
 Tags: golang
 
 @sinmetal
-TOPGATE GAEマイスター
+TOPGATE GAE Meister
+
+* Profile
+
+.link http://www.topgate.co.jp TOPGATE, Inc.
+.link https://twitter.com/sinmetal @sinmetal
+.link https://plus.google.com/u/0/+ShingoIshimura +ShingoIshimura
+
+.image https://pbs.twimg.com/profile_images/3739046962/eef04744836642cc99a8725880a43088.png
 
 * Agenda
 
-- Profile
 - What's App Engine?
 - What's Managed VMs?
 - App Engine for Golang vs App Engine for Java
 - Managed VMs for Golang vs Managed VMs for Java
+
+* What's App Engine?
+
+* What's App Engine?
+
+- Auto Scaling
+- Have all services necessary for the WebApplication
+- Most with the standard of the net/http
+
+.code ./resource/goappengine.go
+
+* Bad App Engine
+
+- Go Version Up Slow (now 1.2)
+- GOMAXPROCS = 1
+- You are in the cage of AppEngine
+- Eternal Beta (; _ ;)
+
+* What's Managed VMs?
+
+* What's Managed VMs?
+
+- Container of App Engine on the Compute Engine
+- VM management of Google
+- Escape from cage of App Engine
+- GOMAXPROCS = X
+
+.image /2014/gocon1130/resource/gae_on_gce.png 350 _
+
+* Bad Managed VMs
+
+- deploy is verrrrrrrrrrrrrrrrrrrrry slow
+- The min value of the auto-scaling is 1
+- Beta
+
+* Performance
+
+* Strategy
+
+.image /2014/gocon1130/resource/strategy.png 250 _
+
+Send the time it took to fetch in bigquery
+Compute Engine Attack from 3 Region
+
+* App Engine for Golang vs App Engine for Java
+
+* App Engine for Golang
+
+.image /2014/gocon1130/resource/appengine_for_go_performance.png
+
+max instances 20
+request is more than 1000 / s and Performance decrease ?
+
+* App Engine for Java
+
+.image /2014/gocon1130/resource/appengine_for_java_performance.png
+
+max instances 38
+
+* MVMs for Golang vs MVMs for Java
+
+* Managed VMs for Golang
+
+.image /2014/gocon1130/resource/appengine_for_go_performance.png
+
+max instances 1
+
+* Managed VMs for Java
+
+.image /2014/gocon1130/resource/mvm_for_java_performance.png
+
+max instances 5
+Bad Response Status All 503
