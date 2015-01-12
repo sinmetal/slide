@@ -1,0 +1,94 @@
+GAE LongTalk
+how to use Google AppEngine
+19:40 14 Jan 2014
+Tags: GAE
+
+@sinmetal
+TOPGATE GAEマイスター
+
+* Agenda
+
+- Profile
+- GAE Overview
+- GAE Topics
+- Advertise
+
+* Profile
+
+.image ../../images/arcanine.png
+
+.link https://twitter.com/sinmetal @sinmetal
+.link https://plus.google.com/u/0/+ShingoIshimura +ShingoIshimura
+.link http://www.topgate.co.jp TOPGATE
+
+* GAE Overview
+
+* What's GAE?
+
+- Googleインフラ上で動くPaaS
+- オートスケール
+- 豊富なサービス
+- 環境の構築はProject作成のみ
+- 便利なLocal環境
+
+* オートスケール
+
+- 負荷に応じてinstanceを自動的に追加,削除
+
+spin up time
+
+- Go 30ms
+- Java 3000ms ~ 7000ms
+- Python 1000ms ~ 3000ms
+
+※ 常駐instanceを用いれば、User影響を限りなく少なくすることが可能
+
+* Module
+
+- Backends Serviceなどを分離してdeploy
+- 豊富なスケーリング設定
+- 切り替え可能なVersion
+- URLで指定したModuleに直接アクセス
+- Go, Java, Pythonを混在
+
+.link http://qiita.com/sinmetal/items/d174a0abb578be24e592 GAE ModulesをSimpleに使う
+
+* エッジキャッシュ
+
+- すさまじいキャパシティ
+- Simpleな利用方法
+- 無料
+
+* Admin Console
+
+- Module, Versionの管理
+- 全instanceのLogをまとめて閲覧
+- Datastore Viewer
+
+.link https://appengine.google.com/ Admin Console
+
+* TaskQueue, Cron
+
+- Requestをトリガーに行う非同期処理
+- HTTP Requestで起動するので、テスト及び手動実行も楽
+- Applicationの仕組みの外にあるService
+- リトライ機能
+
+* Datastore
+
+- スケーラビリティ
+- 容量制限無し
+- スキーマレス
+- XGTx
+- Local環境
+
+* Search API
+
+- 形態素解析の全文検索
+- DatastoreのQueryのサポート
+
+* Advertise
+
+* CP300
+
+.link http://www.topgate.co.jp/mmcd-training Master of Mobile Cloud Development
