@@ -1,5 +1,5 @@
 GAE LongTalk
-how to use Google AppEngine
+GAEとは何なのかを振り返る
 19:40 14 Jan 2014
 Tags: GAE
 
@@ -10,7 +10,6 @@ TOPGATE GAEマイスター
 
 - Profile
 - GAE Overview
-- GAE Topics
 - Advertise
 
 * Profile
@@ -59,6 +58,8 @@ spin up time
 - Simpleな利用方法
 - 無料
 
+.link http://qiita.com/sinmetal/items/37c105a098174fb6bf77 GCP エッジキャッシュ
+
 * Admin Console
 
 - Module, Versionの管理
@@ -79,16 +80,18 @@ spin up time
 - スケーラビリティ
 - 容量制限無し
 - スキーマレス
-- XGTx
+- XGTxによる複数EGのTxサポート
 - Local環境
 
 * Search API
 
+- スケーラビリティ
 - 形態素解析の全文検索
 - DatastoreのQueryのサポート
 
 * Advertise
 
-* CP300
+* Advertise
 
-.link http://www.topgate.co.jp/mmcd-training Master of Mobile Cloud Development
+.link http://connpass.com/event/11154/ AppEngine for Java ハンズオン 
+.link http://google-training.jp/cloud-platform CP300
