@@ -1,0 +1,202 @@
+Google Cloud Platform
+Topgate Works
+15:00 12 Apr 2015
+Tags: GCP
+
+@sinmetal
+TOPGATE GAEマイスター
+
+* Profile
+
+.image ../../images/arcanine.png
+
+.link https://twitter.com/sinmetal @sinmetal
+.link https://plus.google.com/u/0/+ShingoIshimura +ShingoIshimura
+.link http://www.topgate.co.jp TOPGATE
+
+* Agenda
+
+- App Engine vs Compute Engine
+- Cloud Storage Anywhere
+- BigQuery To attack by raising the Lv
+- AWS vs GCP
+- Advertise
+
+* App Engine vs Compute Engine
+
+* App Engine
+
+* App Engine
+
+- サービスとして、KVSのデータベース - Cloud Datastore
+- サービスとして、2つの強力なキャッシュ - Memcache, Edge Cache
+- サービスとして、Queue - Task Queue
+- サービスとして、ファイルのUpload,Download - Blobstore
+- サービスとして、画像の配信と変換 - Image
+- Production上にテスト環境を容易に増やせる
+- Localの開発環境の構築が楽
+- 枯れてる (TGの中では)
+
+* Cloud Datastore
+
+- フルマネージド KVSデータベース
+- 無制限のデータ容量
+- 複数箇所のデータセンターへのレプリケーション
+- データ量が増えても、遅くならないクエリ
+
+* Memcache
+
+- フルマネージド Cache API
+- App Engineと同じデータセンターで動く
+- Key Value形式で保存
+- 無料
+- インスタンス間でのデータの共有
+
+* Edge cache
+
+- フルマネージド キャッシュサービス
+- 各地にあるGoogle Front End に置かれている
+- 無限のキャパシティ
+- 安価
+
+* Task Queue
+
+- フルマネージド キュー API
+- 非同期処理
+- App Engineの自動スケールと組み合わせた分散処理
+- 無限リトライ
+- Txの補助として使うことも
+
+* Blobstore
+
+- フルマネージド File Upload, Download API
+- App Engineのインスタンスを使わずにUpload, Download可能
+- Cloud Storage連携
+
+* Image
+
+- フルマネージド 画像操作API
+- クエリストリングでサイズ指定してサムネイルの作成
+- Crop
+- Rotate
+
+* Production上にテスト環境を容易に増やせる
+
+- GCPUG
+- GCPUG Staging
+- GCPUG Develop
+
+* Localの開発環境の構築が楽
+
+- Demo
+
+* 枯れてる (TGの中では)
+
+PaaSなので、新しいものを入れる余地がない
+
+- Docker ☓
+- redis ☓
+
+※ Managed VMsが粛々と力をためている
+
+* Compute Engine
+
+* Compute Engine
+
+- 2つのLoad Balancer
+- Compute Engine内のネットワーク
+- 自由なVM 
+- App Engineへの挑戦
+
+* 2つのLoad Balancer (Network)
+
+- Port指定でのルーティング
+- 無限のキャパシティ
+- ゾーンをまたいでのロードバランシング
+- フルマネージド ヘルスチェック
+
+* 2つのLoad Balancer (HTTP)
+
+- Beta
+- リソースごとのリクエストの振り先を指定可能
+- 無限のキャパシティ
+- リージョンをまたいでのロードバランシング
+- HTTPS (Alpha)
+- フルマネージド ヘルスチェック
+
+* Compute Engine内のネットワーク
+
+- 同じProjectのインスタンスは、同じネットワークに繋ぐことができる
+- ネットワーク内のインスタンスには、インスタンス名からIP Addrを取得して、アクセスできる
+- 高速なネットワーク
+
+* 自由なVM
+
+- 好きなOSを選べる
+- 好きなミドルウェアをインストールできる
+- 言語も自由
+- 流行りの技術を使える
+- Docker
+- redis
+
+* App Engineへの挑戦
+
+App Engineと同じぐらい開発と運用の手間を減らしたい
+
+- コンソール
+- 開発環境
+- 自動スケール
+
+* どうやって App Engineを作るか？
+
+- Docker
+- Auto Scaler (Compute Engine)
+- StartUp Script & Shutdown Script (Compute Engine)
+- Tag (Compute Engine)
+- Cloud Monitoring
+- BigQuery
+
+* Cloud Storage Anywhere
+
+* Cloud Storage Anywhere
+
+- Google Cloud Platformの何処にでも登場
+- Application Image File
+- Cloud Datastore Backup
+- BigQuery Import File
+
+* BigQuery To attack by raising the Lv
+
+* BigQuery To attack by raising the Lv
+
+- ビッグデータ分析サービス
+- LvはGoogleが上げてくれる
+- データが大量に入っていても遅くならない
+- App Engine or Compute Engine Log 収集
+- Cloud DatastoreのGroup By
+
+* BigQuery Demo
+
+.code ./resource/count_android.sql
+
+* AWS vs GCP
+
+AWSが強い！
+
+- 機能が豊富
+- たくさんのノウハウ
+- 東京リージョン
+
+GCPが強い！
+
+- App Engine
+- Googleが張り巡らしているネットワークインフラ
+- Live Migration
+- Lvを上げて物理で殴るBigQuery
+
+* Advertise
+
+* Advertise
+
+.link http://gcpug.jp/ GCPUG
+.link http://google-training.jp/cloud-platform CP300
