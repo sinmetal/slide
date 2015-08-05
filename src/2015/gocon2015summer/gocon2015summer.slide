@@ -1,0 +1,73 @@
+Unit Testing
+Google App Engine for Go
+15:00 21 Jun 2016
+Tags: GOCON
+
+@sinmetal
+TOPGATE GAEマイスター
+
+* Profile
+
+.image ../../images/arcanine.png
+
+.link https://twitter.com/sinmetal @sinmetal
+.link https://plus.google.com/u/0/+ShingoIshimura +ShingoIshimura
+.link http://www.topgate.co.jp TOPGATE
+
+* GAE/Go Unit Test Overview
+
+- owe GAE / Python Develop Server
+- create a test environment in aetest package
+
+.code ./resource/aetest_sample.go
+
+- the process is created in aetest.NewContext ()
+
+* Problem
+
+- verrrrrrrrrrrrrrrrrrrrrrrrrrrrryyyyyyy slow
+- about 3 seconds from the start of the process until the end
+- In the waiting time of test, coffee and toilet of infinite loop
+
+* It was thought the two methods in order to run faster
+
+- The turn use a single process
+- It runs in parallel ( goapp test -parallel )
+
+.code ./resource/aetest_sample_parallel.go
+
+* Ideal
+
+- Develop Server is I do not need to Unit Test
+- It may be there only Stub
+
+    apiproxy_stub.py
+    app_identity/app_identity_defaultcredentialsbased_stub.py
+    app_identity/app_identity_keybased_stub.py
+    app_identity/app_identity_stub.py
+    blobstore/blobstore_stub.py
+    capabilities/capability_stub.py
+    channel/channel_service_stub.py
+    datastore_file_stub.py
+    files/file_service_stub.py
+    images/images_blob_stub.py
+    images/images_not_implemented_stub.py
+    images/images_stub.py
+    labs/taskqueue/taskqueue_stub.py
+    logservice/logservice_stub.py
+    mail_stub.py
+    memcache/memcache_stub.py
+    modules/modules_stub.py
+    prospective_search/prospective_search_stub.py
+    remote_socket/_remote_socket_stub.py
+    search/simple_search_stub.py
+    system/system_stub.py
+    taskqueue/taskqueue_stub.py
+    urlfetch_stub.py
+    user_service_stub.py
+    xmpp/xmpp_service_stub.py
+
+* Advertise
+
+.link http://gcpug.jp/ GCPUG
+.link http://google-training.jp/cloud-platform CP300
