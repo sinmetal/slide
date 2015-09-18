@@ -1,0 +1,149 @@
+GAE LongTalk
+GAEとは何なのかを振り返る
+15:00 8 Aug 2015
+Tags: GAE
+
+@sinmetal
+TOPGATE GAEマイスター
+
+* Agenda
+
+- Profile
+- GAE Overview
+- Advertise
+
+* Profile
+
+.image ../../images/arcanine.png
+
+.link https://twitter.com/sinmetal @sinmetal
+.link https://plus.google.com/u/0/+ShingoIshimura +ShingoIshimura
+.link http://www.topgate.co.jp TOPGATE
+
+* GAE Overview
+
+* What's GAE?
+
+- Googleインフラ上で動くPaaS
+- オートスケール
+- フルマネージドなインフラ
+- 豊富なサービス
+- 環境の構築はProject作成のみ
+- 便利なLocal環境
+- ゼロイニシャルコスト
+- 毎日の無料枠
+
+* オートスケール
+
+- 負荷に応じてinstanceを自動的に追加,削除
+
+spin up time
+
+- Go 30ms
+- Java 3000ms ~ 7000ms
+- Python 1000ms ~ 3000ms
+
+※ 調子が悪いインスタンスも勝手に削除されるので、管理が楽
+※ 常駐instanceを用いれば、User影響を限りなく少なくすることが可能
+※ spin up timeを短くすることを意識する
+
+* エッジキャッシュ
+
+- すさまじいキャパシティ
+- Simpleな利用方法
+- お安い $0.12/GB
+
+.image resource/gcp_network.png
+.link http://qiita.com/sinmetal/items/37c105a098174fb6bf77 GCP エッジキャッシュ
+
+* Developers Console
+
+- Module, Versionの管理
+- 全instanceのLogをまとめて閲覧
+- Datastore Viewer
+
+.link https://console.developers.google.com Developers Console
+
+* Cloud Logging
+
+- App Engine, Compute EngineのLogを全て閲覧可能
+- Export Support -> BigQuery, Cloud Storage, Cloud Pub/Sub
+- Low Latency
+
+※json出力して、BigQuery側でView生成するのがマイブーム
+
+* Module
+
+- Backends Serviceなどを分離してdeploy
+- 豊富なスケーリング設定
+- 切り替え可能なVersion
+- URLで指定したModuleに直接アクセス
+- Go, Java, Python, PHPを混在
+
+.link http://qiita.com/sinmetal/items/d174a0abb578be24e592 GAE ModulesをSimpleに使う
+
+* TaskQueue
+
+- Requestをトリガーに行う非同期処理
+- HTTP Requestで起動するので、テスト及び手動実行も楽
+- Applicationの仕組みの外にあるService
+- 自動リトライ機能
+- Compute EngineとのTaskの共有
+
+* Datastore
+
+- スケーラビリティ
+- 容量制限無し
+- スキーマレス
+- XGTxによる複数EGのTxサポート
+- Local環境
+- BigQueryへのExport
+
+* Search API
+
+- 形態素解析の全文検索
+- DatastoreのQueryのサポート
+
+.link https://cloud.google.com/appengine/training/fts_intro/ Getting Started with the Python Search API
+
+* Image API
+
+- Cloud Storageの画像を編集
+- Cache機能
+- CDNに近い
+- URLによるResize
+- Rotate, Flip horizontally, Flip Vertically, Crop, I'm Feeling Lucky
+
+.link https://cloud.google.com/appengine/docs/java/images/ Images Java API Overview
+
+* Etc APIs
+
+- App Identity
+- Capabilities
+- Channel
+- Mail
+- Memcache
+- Multitenancy
+- OAuth
+- SMS and Voice
+- Sockets
+- URL Fetch
+- Users
+- XMPP
+
+* End
+
+- Web FrontにはApp Engineが未だに最強
+- GCP Serviceたちとの連携
+- 増え続ける機能
+- 下がり続ける値段
+
+* Advertise
+
+* Advertise
+
+.link https://cloud.google.com/training/ Google Cloud Platform Training
+.link http://google-training.jp/cloud-platform CP300
+.link http://qiita.com/sinmetal Qiita
+.link http://gcpug.jp GCPUG
+.link http://www.topgate.co.jp/service/google-consulting Topgate Consulting
