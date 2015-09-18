@@ -1,0 +1,11 @@
+cron:
+- description: Notification of the Ordinary
+  url: /remind
+  schedule: every monday,tuesday,wednesday,thursday,friday 19:00
+  timezone: Asia/Tokyo
+  target: metalremind
+- description: Notification of holiday
+  url: /remind
+  schedule: every saturday,sunday 09:00
+  timezone: Asia/Tokyo
+  target: metalremind
