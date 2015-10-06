@@ -1,0 +1,256 @@
+ISUCON5予選の課題をGoogle Cloud Platformを全て使って頑張ってみた
+19:00 06 Oct 2015
+Tags: GOCON
+
+@sinmetal
+TOPGATE GAEマイスター
+
+* Profile
+
+.image ../../images/arcanine.png
+
+.link https://twitter.com/sinmetal @sinmetal
+.link https://plus.google.com/u/0/+ShingoIshimura +ShingoIshimura
+.link http://www.topgate.co.jp TOPGATE
+
+* GCPでWebAppを作る場合の選択肢
+
+- Google App Engine
+- Google Compute Engine
+- Google Container Engine
+
+* 今回説明するのは2つ
+
+- Google App Engine
+- Google Compute Engine
+
+* Google Compute Engine
+
+* isucon5 予選で提供されたイメージの構成
+
+.image ./resource/isucon5q.png
+
+* GCP全体で本気出す時の構成
+
+.image ./resource/webongce.png 550 950
+
+* DBの選択
+
+* DBの選択
+
+- Cloud SQL
+- Cloud Datastore
+- DB in Compute Engine
+
+* Cloud SQL
+
+- インターフェイスはMySQL
+- 1インスタンスはあんまり早くない
+- リードレプリカ構築可能
+- Max容量は通常250GB, 有料サポートで500GB
+- インスタンス立てまくるという手も
+
+* Cloud Datastore
+
+- Key Value Store
+- App Engine以外からアクセスすると遅い
+
+* DB in Compute Engine
+
+- お好きなDBが使える
+- 構築, 運用, 保守は手動
+
+* static contentsの配信
+
+* Cloud Storageでstatic contentsを配信する
+
+- スケールはCloud Storageで勝手に
+- RequestがCompute Engineに来ないので、負荷軽減にも役立つ
+
+* Edge Cacheの活用
+
+* Edge Cache?
+
+.image ./resource/edgecache.png 400 950
+
+* Response Headerに入れるだけ！
+
+.code ./resource/cachecontrol.go
+
+- ageはベストエフォート
+- 明示的にdeleteする方法はない
+- 料金はNetwork Outgoingだけなのでお手軽
+- LB data processedがかからないぶん安くなるかも？
+
+* Google App Engine
+
+* GAEのアーキテクチャ
+
+.image ./resource/appengine_architecture.png 550 950
+
+* 言語の選択
+
+* 言語の選択
+
+- Python (spinup time 2000ms)
+- Java (spinup time 5000ms)
+- Go (spinup time 40ms)
+- PHP (spinup time 2000ms)
+
+Moduleごとに変えるという手も
+
+* DBの選択
+
+* DBの選択
+
+- Cloud SQL
+- Cloud Datastore
+- Cloud Bigtable
+- DB in Compute Engine
+
+* Cloud SQL
+
+- インターフェイスはMySQL
+- 1インスタンスはあんまり早くない
+- リードレプリカ構築可能
+- Max容量は通常250GB, 有料サポートで500GB
+- インスタンス立てまくるという手も
+- App Engineからの接続の認証をサポート
+- App Engineと同じZoneで動作
+
+* Cloud Datastore
+
+- Key Value Store
+- App EngineのデフォルトDB
+- 高いスケーラビリティ
+- Kindに大量のデータが入っていてもQueryが遅くならない
+- QueryはSimpleな条件しか使えない
+- 集計関数はサポート無し
+- JOINはサポート無し
+
+* Cloud Bigtalbe
+
+- Key Value Store
+- Cloud Datastoreの低レイヤーもCloud Bigtable
+- 高速
+- Cloud Datastoreと比べると高い
+- QueryはSimpleな条件しか使えない
+- 集計関数はサポート無し
+- JOINはサポート無し
+
+* DB in Compute Engine
+
+- お好きなDBが使える
+- 構築, 運用, 保守は手動
+- Global IP Addrでのアクセスになっちゃう
+
+* Cloud Datastoreらしい構成
+
+* Key 設計
+
+- 意味のある値がKeyの方が良い
+- 単純な連番は苦手
+
+.code ./resource/key.go
+
+* タブレットサーバの分割問題
+
+- Keyが近いと短い時間に大量にデータを登録した場合に、タブレットサーバの分割が頻繁に起こる
+
+.image ./resource/datastore.png 450 900
+
+* pagenationは苦手
+
+- 基本的にCursorでやりとりするので、Readmoreの方が得意
+
+* 集計は事前に
+
+- Count
+- Sum
+- Average
+
+集計はputされる時に、やっておく。
+EntryにCommentが何件あるかを表示する場合、Commentが追加された時点でEntry.CommentCountをインクリメント
+
+* static contentsの配信
+
+* static serverの活用
+
+- Edge Cacheにも自動で乗せてくれる
+
+.code ./resource/appyaml4static.txt
+
+* Cache
+
+* 2つのCache
+
+- Memcache
+- Edge Cache
+
+* Memcache
+
+* Memcache
+
+- Key ValueのシンプルなCache
+- 無料
+- Expireタイミングはベストエフォート
+
+* Memcacheの活用
+
+- Session情報の保存
+- APIのResponseをまるごと
+- DatastoreのFrontとして
+.link https://cloud.google.com/appengine/docs/python/ndb/ ndb for python  
+.link https://github.com/mjibson/goon goon for go
+.link https://github.com/qedus/nds ngs for go  
+
+* Edge Cache
+
+* Response Headerに入れるだけ！
+
+.code ./resource/cachecontrol.go
+
+- ageはベストエフォート
+- 明示的にdeleteする方法はない
+- 料金はNetwork Outgoingだけなのでお手軽
+
+* 非同期処理
+
+* 非同期処理
+
+- RPC呼び出しを複数回行う時は非同期に行う
+- DatastoreはJoinは無いので、KindごとにQueryが必要
+- 1回ずつ同期していると、RPCのResponseが返ってくるまで暇
+
+* Example
+
+.image ./resource/isuxi.png 550 950
+
+* 同期で呼んだ場合 (code)
+
+.code ./resource/querysync.go
+
+* 同期で呼んだ場合 (trace)
+
+.image ./resource/querysync.png 400 950
+
+* 非同期で呼んだ場合 (code)
+
+.code ./resource/queryasync.go
+
+* 非同期で呼んだ場合 (trace)
+
+.image ./resource/queryasync.png 400 950
+
+* Advertise
+
+.link http://gcpug.jp/ GCPUG
+.link https://cloud.google.com/training/ Google Cloud Platform Training
+.link http://google-training.jp/cloud-platform Google Cloud Platform Training in Japan
+.link http://www.topgate.co.jp/recruit Topgate 求人情報 
+
+* Resource
+
+.link http://qiita.com/sinmetal/items/37c105a098174fb6bf77 GCP エッジキャッシュ
+.link http://qiita.com/kazunori279/items/3ce0ba40e83c8cc6e580 YAPC Asia 2015「Google Cloud Platformの謎テクノロジーを掘り下げる」のまとめ
+.link http://talks.golang.org/2013/highperf.slide#1 High Performance Apps with Go on App Engine
