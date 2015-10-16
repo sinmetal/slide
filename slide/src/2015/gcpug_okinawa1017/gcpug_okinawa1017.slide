@@ -1,0 +1,304 @@
+App Engineのパフォーマンスと課金額の節約
+13:00 17 Oct 2015
+Tags: GCP
+
+@sinmetal
+TOPGATE GAEマイスター
+
+* Profile
+
+.image ../../images/arcanine.png
+
+.link https://twitter.com/sinmetal @sinmetal
+.link https://plus.google.com/u/0/+ShingoIshimura +ShingoIshimura
+.link http://www.topgate.co.jp TOPGATE
+
+* パフォーマンス ≒ 課金額節約
+
+* パフォーマンス ≒ 課金額節約
+
+- リソースを使うほどパフォーマンスは落ちる
+- リソースを使うほど課金は多くなる
+
+* GAEのアーキテクチャ
+
+.image ./resource/appengine_architecture.png 550 950
+
+* テクニック
+
+- Basic Technic
+- Advanced Technic
+
+* Basic Technic
+
+* Cache
+
+* 2つのCache
+
+- Memcache
+- Edge Cache
+
+* Memcache
+
+* Memcache
+
+- Key ValueのシンプルなCache
+- 無料
+- Expireタイミングはベストエフォート
+
+* Memcacheの活用
+
+- Session情報の保存
+- APIのResponseをまるごと
+- DatastoreのFrontとして
+.link https://cloud.google.com/appengine/docs/python/ndb/ ndb for python  
+.link https://github.com/mjibson/goon goon for go
+.link https://github.com/qedus/nds ngs for go  
+
+* Edge Cache?
+
+.image ./resource/edgecache.png 400 950
+
+* Response Headerに入れるだけ！
+
+.code ./resource/cachecontrol.go
+
+- ageはベストエフォート
+- 明示的にdeleteする方法はない
+- 料金はNetwork Outgoingだけなのでお手軽
+
+* static contentsの配信
+
+* static serverの活用
+
+- Edge Cacheにも自動で乗せてくれる
+
+.code ./resource/appyaml4static.txt
+
+* Blobstore Service & Image Service
+
+* Blobstore Service
+
+- File Upload, Downloadを扱うService
+- Instance Hourの節約に
+
+.image ./resource/blobstoreservice.png 400 750
+
+* Image Service
+
+- Cloud Storage上の画像を扱うService
+- Resize, Crop, Rotate ...
+- URLでサイズ指定するとResizeした画像を返してくれる恐ろしいService
+- http://lhx.ggpht.com/randomStringImageId=s32
+- ただしACLはかけられない
+
+* Cloud Datastoreらしい構成
+
+* Key 設計
+
+- 意味のある値がKeyの方が良い
+- 単純な連番は苦手
+- Requestの値から生成できたほうが良い
+
+.code ./resource/key.go
+
+* タブレットサーバの分割問題
+
+- Keyが近いと短い時間に大量にデータを登録した場合に、タブレットサーバの分割が頻繁に起こる
+
+.image ./resource/datastore.png 450 900
+
+* pagenationは苦手
+
+- 基本的にCursorでやりとりするので、Readmoreの方が得意
+- ☓ offset
+
+.code ./resource/query-with-cursor.go
+
+* Query
+
+* Query Price
+
+- Datastore Write Ops $0.06 per 100,000 operations
+- Datastore Read Ops $0.06 per 100,000 operations
+- Datastore Small Ops Free
+
+* Datastore Write Ops
+
+- 書き込み時のオペレーション数
+- Entity数
+- Index数
+
+* Datastore Read Ops
+
+- 読み込み時のオペレーション数
+- 1 read + 取得したEntity数
+
+* Datastoer Smaill Ops
+
+- Keys Only Query
+
+* Keys Only Query ?
+
+- 条件に一致したEntityのKeyのみ取得するQuery
+- 1 read Only
+
+.code ./resource/keysonlyquery.go
+
+* Indexの節約
+
+* Queryに使わないIndexはoffに
+
+- 1 propertyに付きDatastore Write Opsが2減る
+- Indexを貼り直す場合は、get, putする
+
+.code ./resource/noindex.go
+
+* InMemory Filter & Sort
+
+- 全ての条件をDatastoreのQueryでやるのではなく、Memoryの処理も組み合わせる
+- 1000件以内への絞り込みはQueryで、残りはMemoryでやるなど
+- 20件ずつ表示とかはやりにくい
+
+* Custom Index or Kind分割 (1)
+
+- 論理削除フラグとかを追加するとQueryにCustom Indexがやたらと必要になる
+- DelFlg(asc) * UpdatedAt(asc)
+- DelFlg(asc) * UpdatedAt(desc)
+- DelFlg(asc) * UpdatedAt(asc) * Category(asc)
+- DelFlg(asc) * UpdatedAt(desc) * Category(asc)
+
+.code ./resource/customindex.go
+
+* Custom Index or Kind分割 (2)
+
+- 論理削除した場合は、データを別Kindに移す
+
+- Item Kind, ItemTrash Kind
+
+.code ./resource/customindex-kind.go
+
+* Batch操作
+
+* Batch操作 Bad !
+
+- loopが回る数だけ、DatastoreへのRPCが走る
+- 100回の場合、 100 * 40ms = 4000ms
+
+.code ./resource/bad-batchget.go
+
+* Batch操作 Good !
+
+- DatastoreへのRPCは1回
+
+.code ./resource/good-batchget.go
+
+* 集計
+
+* 集計はMemcacheやPull Queueを活用する
+
+- Count
+- Sum
+- Average
+
+集計はputされる時に、やることが多い。
+
+* 集計 Bad !
+
+- request 数 * datastore put
+- datastore write opsが多くなる
+
+.image ./resource/bad-aggregate.png 200 600
+
+* 集計 Good ! (1)
+
+- request時はpull queueとmemcacheにput
+
+.image ./resource/good-aggregate1.png 400 800
+
+* 集計 Good ! (2)
+
+- AsyncでDatastoreにまとめて保存する
+- メモリ上でpull queue taskをまとめて集計すれば、datastore writeを減らせる
+
+.image ./resource/good-aggregate2.png 350 700
+
+* Task Queueの活用
+
+* 重たい処理はUser Requestの外で
+
+- UserのResponseに関係ない処理はPush Queueを使って後で行う
+- 例えば、イベントが登録された時に、興味のあるユーザへ通知をするなど
+- 動作させるModuleもUserのRequestを受けるModuleとは別にする
+
+.image ./resource/pusuqueue.png 400 800
+
+* 非同期処理
+
+* 非同期処理
+
+- RPC呼び出しを複数回行う時は非同期に行う
+- DatastoreはJoinは無いので、KindごとにQueryが必要
+- 1回ずつ同期していると、RPCのResponseが返ってくるまで暇
+
+* Example
+
+.image ./resource/isuxi.png 550 950
+
+* 同期で呼んだ場合 (code)
+
+.code ./resource/querysync.go
+
+* 同期で呼んだ場合 (trace)
+
+.image ./resource/querysync.png 400 950
+
+* 非同期で呼んだ場合 (code)
+
+.code ./resource/queryasync.go
+
+* 非同期で呼んだ場合 (trace)
+
+.image ./resource/queryasync.png 400 950
+
+* SpinUp Time
+
+* 言語の選択
+
+- Python (spinup time 2000ms)
+- Java (spinup time 5000ms)
+- Go (spinup time 40ms)
+- PHP (spinup time 2000ms)
+
+Moduleごとに変えるという手も
+
+* Advanced Technic
+
+* Keyに全てを
+
+- Keys OnlyならEntity数に応じたOperationはFree！
+- Keyの中に全データを入れてしまおう！
+- まったく変わることの無いマスタデータの一覧画面などに有効
+
+.code ./resource/allkey.go
+
+* 1 Entityに集約
+
+- Datastore Read Opsは、取得したEntity数によって変わる
+- じゃぁ、限界まで1Entityにぶっこもう！
+- Serializeしてbyte列でぶっこんだり, JsonにしてLong Textにぶっこんだり
+- Entity Size Max 1MB
+
+* Advertise
+
+.link http://gcpug.jp/ GCPUG
+.link https://cloud.google.com/training/ Google Cloud Platform Training
+.link http://google-training.jp/cloud-platform Google Cloud Platform Training in Japan
+.link http://www.topgate.co.jp/recruit Topgate 求人情報 
+.link http://www.topgate.co.jp/service/google-consulting Topgate GCPコンサルティング
+
+* Resource
+
+.link http://qiita.com/sinmetal/items/37c105a098174fb6bf77 GCP エッジキャッシュ
+.link http://qiita.com/kazunori279/items/3ce0ba40e83c8cc6e580 YAPC Asia 2015「Google Cloud Platformの謎テクノロジーを掘り下げる」のまとめ
+.link http://talks.golang.org/2013/highperf.slide#1 High Performance Apps with Go on App Engine

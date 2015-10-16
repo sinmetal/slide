@@ -1,0 +1,1 @@
+w.Header().Set("Cache-Control", "public, max-age=60")

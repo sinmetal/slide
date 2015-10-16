@@ -1,0 +1,1 @@
+q := datastore.NewQuery("Item").KeysOnly()

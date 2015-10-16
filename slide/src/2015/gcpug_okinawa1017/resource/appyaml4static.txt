@@ -1,0 +1,7 @@
+handlers:
+- url: /css
+  static_dir: static/css
+- url: /fonts
+  static_dir: static/fonts
+- url: /js
+  static_dir: static/js
