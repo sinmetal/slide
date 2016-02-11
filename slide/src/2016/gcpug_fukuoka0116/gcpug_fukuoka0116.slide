@@ -1,0 +1,115 @@
+Minecraft Server on Google Cloud Platform
+15:00 16 Jan 2016
+Tags: GCP
+
+@sinmetal
+TOPGATE GAEマイスター
+
+* Profile
+
+.image ../../images/sinmetal.png 500 900
+
+* Minecraft
+
+.image ./resource/minecraft.png
+
+* Setting up a Minecraft server on Google Compute Engine
+
+.image ./resource/setting_minecraftserver_on_computeengine.png 500 800
+
+* Desire
+
+- 安くしたい
+- 新しいワールドを簡単に立ち上げたい
+- Minecraft ServerのVersion Upを簡単にしたい
+- 安くしたい
+- Serverに誰かがログインしたら、通知が欲しい
+- 死因とか分析したい
+- 安くしたい
+
+* Compute Engine Price
+
+- Instance uptime
+- Disk Size
+- Network
+
+* version 1.0.1
+
+* Preemptible Instances
+
+- 24h以内にshutdownされるが、お値段が7割引のインスタンス
+
+* Preemptible Instances
+
+- 無慈悲にshutdownされて、海に投げ出されたり、溶岩に突っ込んだり、高いところから落ちたりするけどセーフ
+- サーバを立ちあげてーというリクエストが24h来るように
+
+* 2nd Generation
+
+* Architecture
+
+.image ./resource/2nd_generation.png 500 800
+
+* Compute Engine - Create Instance
+
+.image ./resource/2nd_computeengine_create.png 500 800
+
+* Comute Engine - Delete Instance
+
+- World DiskのSnapshotを取り、全てのリソースを削除
+
+.image ./resource/2nd_computeengine_delete.png 300 700
+
+* App Engine
+
+- ユーザ用のWeb Application
+
+.image ./resource/SinmetalCraft.png 200 900
+
+* App Engine
+
+- cronで1h毎にCompute Engineのリソースを監視
+- Terminatedのインスタンスがある場合は、World DiskのSnapshotを作成し、リソースを削除
+- Pub/SubからMinecraft ServerをLogを受け取りSlackにPost
+
+.image ./resource/slack_log.png 300 800
+
+* BigQuery
+
+- Logの蓄積/分析
+
+.image ./resource/2nd_bigquery.png 500 800
+
+* Price
+
+* Price 2015/12
+
+- App Engine - free
+- Compute Engine - $36.94
+- Cloud Storage - $0.18
+- Cloud Pub/Sub - $0.03
+
+* Price - Compute Engine
+
+- Preemptible Highcpu Intel N1 4 VCPU running in APAC: 217.767 時間 - $9.58
+- Preemptible Standard Intel N1 1 VCPU running in APAC: 1.217 時間 - $0.02
+- Network Inter Region Egress from APAC to Americas: 328.572 Mebibytes - $0.04
+- Network Internet Egress from APAC to APAC: 6519.125 Mebibytes - $0.76
+- SSD backed PD Capacity: 75.24 Gibibyte-months - $12.38
+- Storage PD Snapshot: 13.215 Gibibyte-months - $0.33
+- Storage PD Capacity: 23.046 Gibibyte-months - $0.89
+- Storage Image: 4.998 Gibibyte-months - $0.41
+- 未使用の静的 IP 料金: 1254.388 時間 - $12.53
+
+* Advertise
+
+.link http://gcpug.jp/ GCPUG
+.link https://cloud.google.com/training/ Google Cloud Platform Training
+.link http://google-training.jp/cloud-platform Google Cloud Platform Training in Japan
+.link https://www.topgate.co.jp/recruit Topgate 求人情報 
+.link https://www.topgate.co.jp/service/google-consulting Topgate GCPコンサルティング
+.link https://www.strongest-cloud.com/ 最強クラウド
+
+* Resource
+
+.link https://cloud.google.com/solutions/gaming/minecraft-server Setting up a Minecraft server on Google Compute Engine
