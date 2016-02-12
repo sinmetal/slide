@@ -1,0 +1,117 @@
+Compute Engine Resources
+19:00 12 Feb 2016
+Tags: GCP
+
+@sinmetal
+TOPGATE GAEマイスター
+
+* Profile
+
+.image ../../images/sinmetal.png 500 900
+
+* Resources
+
+- Instance
+- Persistent Disk
+- Snapshot
+- Local SSD
+- Network Load Balancer
+- HTTP(S) Load Balancer
+- Target Pool
+- Instance Group
+- Metadata
+
+* Instance (1/3)
+
+- CPU
+- Memory
+
+* Instance Config (2/3)
+
+- Name
+- Zone
+- Machine Type
+- Metadata
+- Tag
+- Preemptibility
+
+* Instance Config (3/3)
+
+- Startup Script
+- Shutdown Script
+
+* Persistent Disk
+
+- Network Disk
+- HDD or SSD
+- Boot Disk or Data Disk
+
+* Snapshot
+
+- From Persistent Disk
+- Backup
+- Change Disk Type
+- Change Zone
+- Change Disk Size
+
+* Local SSD
+
+- Local SSD
+
+.link http://qiita.com/kazunori279/items/7837a78d18ec7e22b939 Google Compute Engineの鬼速Local SSDを試す
+
+* Network Load Balancer (1/3)
+
+- TCP/IP Lv Balancing
+- Region
+
+* Network Load Balancer (2/3)
+
+.image ./resource/nlb_targetpool.png 350 800
+
+* Network Load Balancer (3/3)
+
+.image ./resource/nlb_instancegroup.png 450 850
+
+* Target Pool
+
+- Network LB Target Instance Pool
+- Region Base
+- Backup Pool
+
+* HTTP(S) Load Balancer (1/2)
+
+- HTTP(S) Only
+- Global
+
+* HTTP(S) Load Balancer (2/2)
+
+.image ./resource/httplb.png 500 850
+
+* Instance Group
+
+- Instance Template
+- Zone Base
+- Manual Scaling or Auto Scaling
+
+* Unmanaged Instance Groups
+
+- 既存のInstanceを任意で追加する
+- Zone Base
+
+* Metadata
+
+- Key Value
+- Instance Wide
+- Project Wide
+
+.code ./resource/metadata.sh
+
+* Advertise
+
+.link http://gcpug.jp/ GCPUG
+.link https://cloud.google.com/training/ Google Cloud Platform Training
+.link http://google-training.jp/cloud-platform Google Cloud Platform Training in Japan
+.link https://www.topgate.co.jp/recruit Topgate 求人情報 
+.link https://www.topgate.co.jp/service/google-consulting Topgate GCPコンサルティング
+.link https://www.strongest-cloud.com/ 最強クラウド
