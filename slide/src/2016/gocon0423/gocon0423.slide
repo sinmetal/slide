@@ -1,0 +1,53 @@
+Goroutine on Google App Engine
+10:00 23 Apr 2016
+Tags: GCP
+
+@sinmetal
+TOPGATE GAEマイスター
+
+* Profile
+
+.image ../../images/sinmetal.png 500 900
+
+* App Engine Architecture
+
+.image ./resource/appengine.png 500 900
+
+* Performance importance
+
+- Async
+- Concurrent
+
+* Goroutine
+
+.image ./resource/appenginegophercolor.jpg 500 900
+By Renée French
+
+* Sync (code)
+
+.code ./resource/querysync.go
+
+* Sync (trace)
+
+.image ./resource/querysync.png 400 950
+
+* Async (code)
+
+.code ./resource/queryasync.go
+
+* Async (trace)
+
+.image ./resource/queryasync.png 400 950
+
+* Advertise
+
+.link https://gcpug.jp/ GCPUG
+.link https://cloud.google.com/training/ Google Cloud Platform Training
+.link https://training.topgate.co.jp Google Cloud Platform Training in Japan
+.link https://www.topgate.co.jp/recruit Topgate 求人情報 
+.link https://www.topgate.co.jp/service/google-consulting Topgate GCPコンサルティング
+.link https://www.strongest-cloud.com/ 最強クラウド
+
+* Resource
+
+.link http://talks.golang.org/2013/highperf.slide#1 High Performance Apps with Go on App Engine
