@@ -1,0 +1,1 @@
+err := datastore.GetMulti(ctx, keys, dst)
