@@ -64,7 +64,7 @@ TOPGATE GAEマイスター
 
 - ユーザ用のWeb Application
 
-.image ./resource/SinmetalCraft.png 200 900
+.image ./resource/SinmetalCraft.png 200 1000
 
 * App Engine
 
@@ -106,6 +106,7 @@ TOPGATE GAEマイスター
 * Minecraft Overviewの追加
 
 - ServerにLoginせずに、Worldの状態を確認したい
+- World DataからWebを生成
 
 .image ./resource/minecraft_overview.png 400 800
 
