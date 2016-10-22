@@ -18,8 +18,8 @@ import (
 	"runtime"
 	"strings"
 
-	"code.google.com/p/go.tools/playground/socket"
-	"code.google.com/p/go.tools/present"
+	"golang.org/x/tools/playground/socket"
+	"golang.org/x/tools/present"
 )
 
 const basePkg = "code.google.com/p/go.tools/cmd/present"
