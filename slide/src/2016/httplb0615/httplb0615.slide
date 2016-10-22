@@ -1,0 +1,135 @@
+GCE HTTP(S) LB
+10:00 15 Jun 2016
+Tags: GCP
+
+@sinmetal
+TOPGATE GAEマイスター
+
+* Profile
+
+.image ../../images/sinmetal.png 500 900
+
+* HTTP(S) Load Balancer
+
+* Create Instance
+
+Web Server 用のinstanceをus-central1-bに作成
+
+.code ./resource/p1_createinstance.sh
+
+* Create Instance
+
+Web Server 用のinstanceをus-central1-cに作成
+
+.code ./resource/p2_createinstance.sh
+
+* Create Firewall Rule
+
+.code ./resource/p0_createfw.sh
+
+* Create Instance Group
+
+us-central1-b用のUnmanaged Instance Groupを作成
+
+.code ./resource/p4_createig.sh
+
+* Create Instance Group
+
+us-central1-c用のUnmanaged Instance Groupを作成
+
+.code ./resource/p5_createig.sh
+
+* Add Instance
+
+us-central1-bのIGにIntanceを追加
+
+.code ./resource/p6_addinstance.sh
+
+* Add Instance
+
+us-central1-cのIGにIntanceを追加
+
+.code ./resource/p7_addinstance.sh
+
+* Create Health Check
+
+root pathにアクセスする単純なHealth Checkを作成
+
+.code ./resource/p8_createhealthcheck.sh
+
+* Create Backend Service
+
+.code ./resource/p9_createbs.sh
+
+* Add Instance Group
+
+Backend Serviceにus-central1-bのInstance Groupを追加
+
+.code ./resource/p10_addbs.sh
+
+* Add Instance Group
+
+Backend Serviceにus-central1-cのInstance Groupを追加
+
+.code ./resource/p11_addbs.sh
+
+* Create Url-Map
+
+全Pathをweb-serviceに割り振るUrl-Mapを作成
+
+.code ./resource/p12_createum.sh
+
+* Create Target HTTP Proxy
+
+SSLなどを設定する領域
+
+.code ./resource/p13_createthp.sh
+
+* Create Static IP Addr
+
+LB用のIP Addrを作成
+
+.code ./resource/p3_lbaddr.sh
+
+* Create Forwarding Rule
+
+--address に指定知るのは前のページで作ったaddress
+
+.code ./resource/p15_createfr.sh
+
+* Test
+
+LBにRequestを送り結果を確認
+LB作成直後はheath check okになっていないので、少し待つ
+
+.code ./resource/p16_curl.sh
+
+* Options : Create Firewall-Rule by Health Check
+
+HTTP(S) LBのヘルスチェックは130.211.0.0/22から来る
+tcp:80を0.0.0.0/0で許可しない場合に設定する
+
+.code ./resource/p17_createfwr.sh
+
+* Options : Removing external IPs except for a bastion host
+
+InstanceのExternal IP Addrは消してもOK
+
+.code ./resource/p18_deleteexternalip.sh
+
+* CleanUp
+
+.code ./resource/p99_cleanup.sh
+
+* Advertise
+
+.link https://gcpug.jp/ GCPUG
+.link https://cloud.google.com/training/ Google Cloud Platform Training
+.link https://training.topgate.co.jp Google Cloud Platform Training in Japan
+.link https://www.topgate.co.jp/recruit Topgate 求人情報 
+.link https://www.topgate.co.jp/service/google-consulting Topgate GCPコンサルティング
+.link https://www.strongest-cloud.com/ 最強クラウド
+
+* Resource
+
+.link https://cloud.google.com/compute/docs/load-balancing/http/cross-region-example Creating Cross-Region Load Balancing
