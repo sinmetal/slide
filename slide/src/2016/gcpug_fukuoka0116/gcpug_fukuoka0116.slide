@@ -37,7 +37,7 @@ TOPGATE GAEマイスター
 
 * Preemptible Instances
 
-- 24h以内にshutdownされるが、お値段が7割引のインスタンス
+- 24h以内にshutdownされるが、お値段が8割引のインスタンス
 
 * Preemptible Instances
 
@@ -64,7 +64,7 @@ TOPGATE GAEマイスター
 
 - ユーザ用のWeb Application
 
-.image ./resource/SinmetalCraft.png 200 900
+.image ./resource/SinmetalCraft.png 200 1000
 
 * App Engine
 
@@ -101,11 +101,27 @@ TOPGATE GAEマイスター
 - Storage Image: 4.998 Gibibyte-months - $0.41
 - 未使用の静的 IP 料金: 1254.388 時間 - $12.53
 
+* version 2.1
+
+* Minecraft Overviewの追加
+
+- ServerにLoginせずに、Worldの状態を確認したい
+- World DataからWebを生成
+
+.image ./resource/minecraft_overview.png 400 800
+
+* Architecture
+
+- App Engine Cron を1日に1回起動
+- 完成品はCloud Storageに出力
+
+.image ./resource/minecraft_overview_architecture.png 250 800
+
 * Advertise
 
-.link http://gcpug.jp/ GCPUG
+.link https://gcpug.jp/ GCPUG
 .link https://cloud.google.com/training/ Google Cloud Platform Training
-.link http://google-training.jp/cloud-platform Google Cloud Platform Training in Japan
+.link https://training.topgate.co.jp Google Cloud Platform Training in Japan
 .link https://www.topgate.co.jp/recruit Topgate 求人情報 
 .link https://www.topgate.co.jp/service/google-consulting Topgate GCPコンサルティング
 .link https://www.strongest-cloud.com/ 最強クラウド
