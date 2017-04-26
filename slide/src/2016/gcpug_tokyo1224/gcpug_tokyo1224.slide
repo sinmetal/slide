@@ -1,0 +1,162 @@
+Firebase Realtime DBを利用して、オンラインゲームを作るよ
+15:00 24 Dec 2016
+Tags: GCP
+
+@sinmetal
+TOPGATE GAEマイスター
+
+* Profile
+
+.image ../../images/sinmetal.png 500 900
+
+* 動機
+
+- 自分の好きなゲームをやりたかった
+
+* 自分の好きなゲーム？
+
+- マルチプレイ
+- マイクラ風ゲーム
+
+* Demo
+
+* 要件
+
+- クライアントをインストールさせたくなかった
+- リアルタイム通信を行うサーバの管理をしたくなかった
+
+* AI
+
+- NPCのAIを作成する必要があった
+- 自由な世界なので、自分で実装するの大変そうだ
+- 目の前に、AIを生み出すAI Fujiwaraがいた
+
+* 利用しているもの
+
+* 利用しているもの
+
+- Firebase Realtime DB
+- tmlib.js (phina.jsに移行しないと・・・)
+- Google Container Engine
+- Google Cloud ML Prediction
+
+* Firebase Realtime DB
+
+- リアルタイム同期
+- オフラインデータベース
+- Client (JS, Android, iOS, Unity)
+
+* tmlib.js
+
+- Canvasに描画するゲーム用ライブラリ
+- 最新版は phina.js に名前を変えている
+
+* Google Container Engine
+
+- Docker Containerをオーケストレーションしてくれる環境
+- KubernetesをGCP環境に最適化させたサービス
+
+* Google Cloud ML Prediction
+
+- TensorFlowで作成した学習モデルをWeb APIとして提供する環境
+
+* 構成
+
+.image ./resource/orc-architecture.png 500 800
+
+* AI
+
+* AI
+
+- Playerを追いかけるAI
+- 盤面の状態を渡すと、None ←→↑↓ を返してくる
+- 現状、学習が足らず、頭が足らない
+
+* AI Request
+
+- 3つの盤面を渡している
+- 8*8の範囲を認識するので、プレイヤーとの距離によって1マスのサイズを調整
+
+.image ./resource/orc-request.png 400 900
+
+* normal size
+
+.image ./resource/orc-normal.png 550 750
+
+* big size
+
+.image ./resource/orc-big.png 550 750
+
+* AI Response
+
+行動のスコアが返ってくる
+
+- 何もしない : 1.6714696884155273
+- 左に進む : 1.6746869087219238
+- 右に進む : 0.7844944000244141
+- 上に進む : 1.8040772676467896
+- 下に進む : 2.203591823577881
+
+* 実行間隔
+
+.image ./resource/orc-architecture-sec.png 500 800
+
+* Client
+
+* Client
+
+- tmlib.js で適当に書いてる
+- 同期するための工夫は特にしておらず、Firebase任せ
+- Firebaseが更新した値をひたすら画面に反映
+
+* Monster Value
+
+- angle : 向いている方向
+- avatar : アバター
+- name : 名前
+- paused : 
+- speed : 移動速度
+- x : X座標
+- y : Y座標
+
+* Firebase Realtime DB Demo
+
+* Future
+
+* Future
+
+- 構成の変更
+- ゲームの機能の追加
+
+* 構成の変更
+
+.image ./resource/orc-architecture-future.png
+
+* ゲームの機能の追加
+
+- 遠距離攻撃
+- モンスターの種類の追加
+- 複数モンスターによる隊列
+- 味方NPCの追加
+
+* Next
+
+* Next
+
+- DQNと過ごす夏休み (仮)
+
+* Advertise
+
+.link https://gcpug.jp/ GCPUG
+.link https://cloud.google.com/training/ Google Cloud Platform Training
+.link https://training.topgate.co.jp Google Cloud Platform Training in Japan
+.link https://www.topgate.co.jp/recruit Topgate 求人情報 
+.link https://www.topgate.co.jp/service/google-consulting TOPGATE Professional Advisory Service
+.link https://www.strongest-cloud.com/ 最強クラウド
+
+* Resource
+
+.link http://phinajs.com/ phina.js
+.link https://firebase.google.com/ Firebase
+.link https://cloud.google.com/container-engine/ Google Container Engine
+.link https://cloud.google.com/ml/docs/concepts/prediction-overview Google Cloud ML Prediction
