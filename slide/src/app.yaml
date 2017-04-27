@@ -1,6 +1,6 @@
 application: sinmetal-slide
 module: default
-version: 20151006a
+version: 20170426
 runtime: go
 api_version: go1
 instance_class: F1

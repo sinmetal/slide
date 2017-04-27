@@ -1,0 +1,102 @@
+Container EngineでFirebase Realtime DBをWatchしつつ、ゲームのNPCを動かす
+20:00 26 Apl 2017
+Tags: GCP
+
+@sinmetal
+TOPGATE GAEマイスター
+
+* Profile
+
+.image ../images/sinmetal.png 500 900
+
+* Demo
+
+.image ./resource/game.png 500 900
+
+* 利用しているもの
+
+- Firebase Realtime DB
+- tmlib.js (phina.jsに移行しないと・・・)
+- Google Container Engine
+- TensorFlow
+
+* Firebase Realtime DB
+
+* Firebase Realtime DB
+
+- マップの共有
+- プレイヤーの共有
+- モンスターの共有
+
+* Mapの共有
+
+.image ./resource/firebase-map.png 500 500
+
+* プレイヤーの共有
+
+.image ./resource/firebase-player.png 500 500
+
+* モンスターの共有
+
+.image ./resource/firebase-monster.png 500 500
+
+* tmlib.js
+
+* tmlib.js
+
+- Canvasに描画するゲーム用ライブラリ
+- 最新版は phina.js に名前を変えている
+
+* tmlib.js
+
+- Firebase Realtime DBからの情報をごりごり反映している
+
+.image ./resource/tmlibjs-firebase.png 500 500
+
+* Google Container Engine
+
+* Google Container Engine
+
+- Docker Containerをオーケストレーションしてくれる環境
+- KubernetesをGCP環境に最適化させたサービス
+
+.image ../images/gcp-icons/Container-Engine.png
+
+* NPCのAIを動作させる
+
+- ステージング環境はPreemptivle VM n1-standard-1 2台
+- 片方死んでもPodは逆側のNodeで再作成
+- 1日 $0.48
+
+.image ./resource/gke-node.png 400 700
+
+* GKE構成
+
+.image ./resource/gke-pods.png 500 880
+
+* Frontend Pod構成
+
+.image ./resource/gke-frontend-pod.png 500 800
+
+* 課題
+
+* 課題
+
+- Firebase Realtime DB Download Costがすごいことに！
+- モンスター1体につき、100MB/1h
+
+* Advertise
+
+.link https://gcpug.jp/ GCPUG
+.link https://cloud.google.com/training/ Google Cloud Platform Training
+.link https://training.topgate.co.jp Google Cloud Platform Training in Japan
+.link https://www.topgate.co.jp/recruit Topgate 求人情報 
+.link https://www.topgate.co.jp/service/google-consulting TOPGATE Professional Advisory Service
+.link https://www.strongest-cloud.com/ 最強クラウド
+
+* Resource
+
+.link http://phinajs.com/ phina.js
+.link https://firebase.google.com/ Firebase
+.link https://cloud.google.com/container-engine/ Google Container Engine
+.link http://enakai00.hatenablog.com/entry/2016/08/10/152334 Google Container Engineで五目並べアプリのAPIサーバーを作るデモ
