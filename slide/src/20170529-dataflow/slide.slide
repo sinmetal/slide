@@ -1,0 +1,176 @@
+Cloud Dataflow Fundamentals
+19:00 29 May 2017
+Tags: GCP
+
+@sinmetal
+TOPGATE GAEマイスター
+
+* Profile
+
+.image ../images/sinmetal.png 500 900
+
+* Cloud Dataflow Overview
+
+- データのパイプライン処理をフルマネージドで行うサービス
+- Compute Engine上に乗っかる
+- オートスケール
+- Batch or Streaming
+- Java or Python
+- Dataflow SDK v1, Apache Beam v2
+
+* 大雑把な雰囲気
+
+- フローチャートみたいな感じ
+
+.image ./resource/dataflow_overview.png 500 900
+
+* IO
+
+- Avro (Google Cloud Storage)
+- Txt (Google Cloud Storage)
+- BigQuery
+- Bigtable
+- Datastore
+- Pub/SUb
+- Custom
+
+* Process
+
+* Pipeline
+
+Pipelene全体を表すクラス
+処理を定義していき、最後にrun()を呼ぶ
+.code ./resource/pipeline.java
+
+* PCollectipn
+
+- データの配列
+- 入力データの配列や、作成したデータを返すなど、受け渡しに使う
+
+.code ./resource/pcollection.java
+
+* PTransform
+
+データのInput, Outputを決めるクラス
+.code ./resource/ptransform.java
+
+* DoFn
+
+1つのValueの処理を行うクラス
+.code ./resource/dofn.java
+
+* 大まかな流れ
+
+.image ./resource/dataflow_logic.png
+
+* Group By
+
+Group Byを行うにはGroup化する値をKeyにしたMapを生成して行う
+
+.code ./resource/groupby.java
+
+* Side IO
+
+複数のInputを束ねる時や、データを複数にOutputする時に使う
+
+- item.csv, category.csvをJOINする
+- Validationを行って、invalidなデータはinvalid.csvとして出力する
+- カテゴリごとに、出力先のTableを変える
+
+.code ./resource/sideio.java
+
+* Example
+
+.image ./resource/dataflow.png 550 600
+
+* Batch vs Streaming
+
+* Batch
+
+* Batch Overview
+
+- Start時にnodeを構築し、Input Dataを全て読み込んで、処理を終えたら、nodeを削除
+- データ量、処理の負荷に合わせてスケールする
+
+* 起動 
+
+- maven
+- Eclipse Plugin
+
+* 起動 (Dataflow Template) 1/2
+
+Cloud Storage上にデプロイしておき任意のタイミングで起動する機能
+
+- デプロイ
+
+.code ./resource/dataflow-template-create.sh
+
+- 実行
+
+.code ./resource/dataflow-jobs-run.sh
+
+* 起動 (Dataflow Template) 2/2
+
+起動時に実行時パラメータを渡す場合、Template作成時に定義しておく
+
+.code ./resource/valueprovider.java
+
+- 実行
+
+.code ./resource/dataflow-jobs-run.1.sh
+
+* Streaming
+
+* Streaming Overview
+
+- メインのInputはPub/Subを設定し、データをリアルタイムに処理する
+- データ量、処理の負荷に合わせてスケールする
+
+* Window
+
+- Streamingで集計を行う時にデータの範囲を決める
+- 30秒毎に集計？1時間毎に集計？
+
+* UnitTest
+
+* UnitTest Class
+
+- DoFnTester DoFnテスト用
+- DataflowAssert PCollectionテスト用
+- TestPipeline Pipelineテスト用
+
+* Example for DoFn UnitTest
+
+.code ./resource/testdofn.java
+
+* Price
+
+* Dataflow vs Compute Engine
+
+.image ./resource/dataflow_price.png
+
+* 実際バッチ処理を動かすとDataflowの方が安くなる
+
+- DataflowはCPUの使い方が上手
+- 上手にスケールするので、自作のスケール仕組みでDataflowに勝つのは難しい
+- 短い時間で効率よく終わらせれば、結果としてDataflowの方が安くなる
+
+* We are hiring
+
+- Google Cloudと共に生きたい人
+- 年中、GCPUG Tシャツで過ごしたい人
+.link https://www.topgate.co.jp/recruit TOPGATE 求人情報 
+
+* Resource
+
+.link https://cloud.google.com/dataflow/docs/ Cloud Dataflow Document
+.link https://beam.apache.org/ Apache Beam
+
+* Advertise
+
+.link https://gcpug.jp/ GCPUG
+.link https://cloud.google.com/training/ Google Cloud Platform Training
+.link https://training.topgate.co.jp Google Cloud Platform Training in Japan
+.link https://www.topgate.co.jp/recruit TOPGATE 求人情報 
+.link https://www.topgate.co.jp/service/google-consulting TOPGATE Professional Advisory Service
+.link https://www.strongest-cloud.com/ 最強クラウド
