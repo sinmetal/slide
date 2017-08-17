@@ -1,0 +1,95 @@
+Google Container EngineでTensorFlowのPredictionを動かすよ
+19:00 18 Dec 2018
+Tags: GCP
+
+@sinmetal
+TOPGATE GAEマイスター
+
+* Profile
+
+.image ../../images/sinmetal.png 500 900
+
+* Demo
+
+.image ./resource/game.png 500 900
+
+* Architecture v1.0 (DQNと過ごすクリスマス時代)
+
+.image ./resource/orc-architecture-v1.0.png 500 900
+
+* AI Request
+
+- 3つの盤面を渡している
+- 8*8の範囲を認識するので、プレイヤーとの距離によって1マスのサイズを調整
+
+.image ./resource/orc-request.png 400 900
+
+* image
+
+.image ./resource/orc-normal.png 550 750
+
+* AI Response
+
+行動のスコアが返ってくる
+
+- 何もしない : 1.6714696884155273
+- 左に進む : 1.6746869087219238
+- 右に進む : 0.7844944000244141
+- 上に進む : 1.8040772676467896
+- 下に進む : 2.203591823577881
+
+* v1.0の課題
+
+ML Engine Online Predictionを呼び出しまくるのが厳しい
+
+- 1回の予測に1secほどかかる
+- 結構お金かかる (予測 1,000 回あたり $0.10、プラス 1 時間あたり $0.40)
+
+* Architecture v2.0 (DQNとGorilaと夏休み時代)
+
+.image ./resource/orc-architecture-v2.0.png 500 900
+
+* Frontend Architecture v2.0 (DQNとGorilaと夏休み時代)
+
+.image ./resource/metal-tile-frontend-architecture.png 500 900
+
+* Container Engine Environment
+
+- ステージング環境はPreemptivle VM n1-standard-1 1~3台 (Auto scale)
+- Nodeが死んでもPodは別のNodeで再作成
+- 1Node/day $0.48 (ML Engine Predictionだと5000回ぐらいの料金)
+
+* Performance
+
+- DQNのリクエスト処理は通信も合わせて、3.3ms ~ 250msの時間 (Avg 5.36ms)
+- 呼び出し回数で料金は変わらないので、80ms毎に呼び出している
+- DQN pod used memory 75MB
+- モンスター10体なら、1podで普通にさばいている
+
+* Build architecture
+
+.image ./resource/metal-tile-build.png 500 900
+
+* Next
+
+* Next
+
+- DQNとの新生活 (仮)
+
+* Advertise
+
+.link https://gcpug.jp/ GCPUG
+.link https://cloud.google.com/training/ Google Cloud Platform Training
+.link https://training.topgate.co.jp Google Cloud Platform Training in Japan
+.link https://www.topgate.co.jp/recruit Topgate 求人情報 
+.link https://www.topgate.co.jp/service/google-consulting TOPGATE Professional Advisory Service
+.link https://www.strongest-cloud.com/ 最強クラウド
+
+* Resource
+
+.link http://phinajs.com/ phina.js
+.link https://firebase.google.com/ Firebase
+.link https://cloud.google.com/container-engine/ Google Container Engine
+.link https://cloud.google.com/ml/docs/concepts/prediction-overview Google Cloud ML Engine Prediction
+.link https://www.youtube.com/watch?v=HbCgIGZeL44 DQNと過ごすクリスマス 2016 時代のDQN
+.link https://youtu.be/1fzShdFDKzs DQNとGorilaと夏休み 2017 時代のDQN
