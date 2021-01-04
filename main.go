@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// +build !appengine
-
 package main
 
 import (
@@ -15,35 +13,53 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"runtime"
 	"strings"
 
-	"golang.org/x/tools/playground/socket"
 	"golang.org/x/tools/present"
 )
 
-const basePkg = "code.google.com/p/go.tools/cmd/present"
+const basePkg = "golang.org/x/tools/cmd/present"
 
-var basePath string
+var (
+	httpAddr      = flag.String("http", "127.0.0.1:3999", "HTTP service address (e.g., '127.0.0.1:3999')")
+	originHost    = flag.String("orighost", "", "host component of web origin URL (e.g., 'localhost')")
+	basePath      = flag.String("base", "", "base path for slide template and static resources")
+	contentPath   = flag.String("content", ".", "base path for presentation content")
+	usePlayground = flag.Bool("use_playground", false, "run code snippets using play.golang.org; if false, run them locally and deliver results by WebSocket transport")
+	nativeClient  = flag.Bool("nacl", false, "use Native Client environment playground (prevents non-Go code execution) when using local WebSocket transport")
+)
 
 func main() {
-	httpAddr := flag.String("http", "127.0.0.1:3999", "HTTP service address (e.g., '127.0.0.1:3999')")
-	originHost := flag.String("orighost", "", "host component of web origin URL (e.g., 'localhost')")
-	flag.StringVar(&basePath, "base", "", "base path for slide template and static resources")
 	flag.BoolVar(&present.PlayEnabled, "play", true, "enable playground (permit execution of arbitrary user code)")
-	nativeClient := flag.Bool("nacl", false, "use Native Client environment playground (prevents non-Go code execution)")
+	flag.BoolVar(&present.NotesEnabled, "notes", false, "enable presenter notes (press 'N' from the browser to display them)")
 	flag.Parse()
 
-	if basePath == "" {
+	if os.Getenv("GAE_ENV") == "standard" {
+		log.Print("Configuring for App Engine Standard")
+		port := os.Getenv("PORT")
+		if port == "" {
+			port = "8080"
+		}
+		*httpAddr = fmt.Sprintf("0.0.0.0:%s", port)
+		pwd, err := os.Getwd()
+		if err != nil {
+			log.Fatalf("Couldn't get pwd: %v\n", err)
+		}
+		*basePath = pwd
+		*usePlayground = true
+		*contentPath = "./content/"
+	}
+
+	if *basePath == "" {
 		p, err := build.Default.Import(basePkg, "", build.FindOnly)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Couldn't find gopresent files: %v\n", err)
 			fmt.Fprintf(os.Stderr, basePathMessage, basePkg)
 			os.Exit(1)
 		}
-		basePath = p.Dir
+		*basePath = p.Dir
 	}
-	err := initTemplates(basePath)
+	err := initTemplates(*basePath)
 	if err != nil {
 		log.Fatalf("Failed to parse templates: %v", err)
 	}
@@ -58,8 +74,14 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	origin := &url.URL{Scheme: "http"}
 	if *originHost != "" {
+		if strings.HasPrefix(*originHost, "https://") {
+			*originHost = strings.TrimPrefix(*originHost, "https://")
+			origin.Scheme = "https"
+		}
+		*originHost = strings.TrimPrefix(*originHost, "http://")
 		origin.Host = net.JoinHostPort(*originHost, port)
 	} else if ln.Addr().(*net.TCPAddr).IP.IsUnspecified() {
 		name, _ := os.Hostname()
@@ -76,32 +98,19 @@ func main() {
 		}
 	}
 
-	if present.PlayEnabled {
-		if *nativeClient {
-			socket.RunScripts = false
-			socket.Environ = func() []string {
-				if runtime.GOARCH == "amd64" {
-					return environ("GOOS=nacl", "GOARCH=amd64p32")
-				}
-				return environ("GOOS=nacl")
-			}
-		}
-		playScript(basePath, "SocketTransport")
-		http.Handle("/socket", socket.NewHandler(origin))
-	}
-	http.Handle("/static/", http.FileServer(http.Dir(basePath)))
+	initPlayground(*basePath, origin)
+	http.Handle("/static/", http.FileServer(http.Dir(*basePath)))
 
 	if !ln.Addr().(*net.TCPAddr).IP.IsLoopback() &&
-		present.PlayEnabled && !*nativeClient {
+		present.PlayEnabled && !*nativeClient && !*usePlayground {
 		log.Print(localhostWarning)
 	}
 
 	log.Printf("Open your web browser and visit %s", origin.String())
+	if present.NotesEnabled {
+		log.Println("Notes are enabled, press 'N' from the browser to display them.")
+	}
 	log.Fatal(http.Serve(ln, nil))
-}
-
-func playable(c present.Code) bool {
-	return present.PlayEnabled && c.Play
 }
 
 func environ(vars ...string) []string {
@@ -133,11 +142,12 @@ You may use the -base flag to specify an alternate location.
 const localhostWarning = `
 WARNING!  WARNING!  WARNING!
 
-The present server appears to be listening on an address that is not localhost.
-Anyone with access to this address and port will have access to this machine as
-the user running present.
+The present server appears to be listening on an address that is not localhost
+and is configured to run code snippets locally. Anyone with access to this address
+and port will have access to this machine as the user running present.
 
-To avoid this message, listen on localhost or run with -play=false.
+To avoid this message, listen on localhost, run with -play=false, or run with
+-play_socket=false.
 
 If you don't understand this message, hit Control-C to terminate this process.
 
